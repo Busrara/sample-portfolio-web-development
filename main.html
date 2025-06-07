@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jane Jones Photography</title>
+  <meta name="description" content="Jane Jones - Professional Photography Portfolio">
+  <meta name="keywords" content="photography, portrait, wedding, nature">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    header {
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    nav img {
+      height: 40px;
+      width: auto;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #e74c3c;
+    }
+
+    .wrapper-gallery {
+      padding: 120px 20px 60px;
+      background-color: #fafafa;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    .wrapper-gallery h2 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: #333;
+      font-weight: 300;
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      color: #888;
+      margin-bottom: 40px;
+      font-style: italic;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-auto-rows: 250px;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gallery-img:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .gallery-img.tall {
+      grid-row: span 2;
+    }
+
+    /* Lightbox Styles */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 85%;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      object-fit: contain;
+    }
+
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      font-size: 40px;
+      color: white;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.5);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 15px 20px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .prev {
+      left: 40px;
+    }
+
+    .next {
+      right: 40px;
+    }
+
+    /* Contact Section */
+    .contact-wrapper {
+      background: #fff;
+      padding: 80px 20px;
+    }
+
+    .contact-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .contact-header h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .contact-header p {
+      font-size: 1.1em;
+      color: #666;
+    }
+
+    .contact-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-info h3, .contact-form-container h3 {
+      font-size: 1.5em;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .info-item .icon {
+      font-size: 1.5em;
+      margin-right: 15px;
+      width: 40px;
+    }
+
+    .info-item h4 {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .info-item p {
+      color: #666;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #e74c3c;
+    }
+
+    .submit-btn {
+      background: #e74c3c;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    /* About Section */
+    .about-wrapper {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 80px 20px;
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      font-weight: 300;
+    }
+
+    .about-intro {
+      font-size: 1.3em;
+      color: #e74c3c;
+      font-weight: 500;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    .about-text p {
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .about-highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
+      margin: 40px 0;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .highlight-item {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .highlight-item h4 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+
+    .highlight-item p {
+      color: #666;
+      font-size: 0.95em;
+      margin: 0;
+    }
+
+    .about-image {
+      position: relative;
+      text-align: center;
+    }
+
+    .about-image img {
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .about-image img:hover {
+      transform: translateY(-10px);
+    }
+
+    .image-caption {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(231, 76, 60, 0.1);
+      border-radius: 10px;
+      border-left: 4px solid #e74c3c;
+    }
+
+    .image-caption p {
+      font-style: italic;
+      color: #2c3e50;
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: #2c3e50;
+      color: white;
+      padding: 60px 20px 20px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 20px;
+      color: #ecf0f1;
+    }
+
+    .footer-section p {
+      color: #bdc3c7;
+      line-height: 1.6;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-section ul li a {
+      color: #bdc3c7;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section ul li a:hover {
+      color: #e74c3c;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      font-size: 1.5em;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .social-links a:hover {
+      transform: scale(1.2);
+    }
+
+    .footer-bottom {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #34495e;
+      text-align: center;
+      color: #bdc3c7;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      nav ul {
+        gap: 1rem;
+      }
+
+      .wrapper-gallery {
+        padding: 150px 15px 40px;
+      }
+
+      .wrapper-gallery h2 {
+        font-size: 2em;
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+      }
+
+      .contact-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+
+      .about-highlights {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .about-image {
+        order: -1;
+      }
+
+      .close {
+        top: 20px;
+        right: 20px;
+        font-size: 30px;
+        width: 50px;
+        height: 50px;
+      }
+
+      .nav-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+
+      .prev {
+        left: 20px;
+      }
+
+      .next {
+        right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header id="header-main">
+    <nav class="wrapper-main">
+      <a href="#"><img src="img/logo.jpg"></a>
+      <ul>
+        <li><a href="#index-gallery">My Work</a></li>
+        <li><a href="#about">About Me</a></li>
+        <li><a href="#contact-section">Contact Me</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="wrapper-gallery" id="index-gallery">
+    <h2>My Photo Gallery</h2>
+    <p class="subtitle">Jane Jones</p>
+    <div class="gallery-grid">
+      <img src="https://picsum.photos/400/300?random=1" alt="Portrait Photography" class="gallery-img">
+      <img src="https://picsum.photos/400/300?random=2" alt="Wedding Photography" class="gallery-img">
+      <img src="https://picsum.photos/400/600?random=3" alt="Nature Photography" class="gallery-img tall">
+      <img src="https://picsum.photos/400/300?random=4" alt="Event Photography" class="gallery-img">
+      <img src="https://picsum.photos/400/300?random=5" alt="Portrait Session" class="gallery-img">
+      <img src="https://picsum.photos/400/300?random=6" alt="Landscape Photography" class="gallery-img">
+      <img src="https://picsum.photos/400/300?random=7" alt="Street Photography" class="gallery-img">
+      <img src="https://picsum.photos/400/300?random=8" alt="Fashion Photography" class="gallery-img">
+      <img src="https://picsum.photos/400/600?random=9" alt="Architectural Photography" class="gallery-img tall">
+    </div>
+  </section>
+
+  <section id="about" class="about-wrapper">
+    <div class="about-container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>About Jane Jones</h2>
+          <p class="about-intro">Passionate photographer with over 8 years of experience capturing life's most precious moments.</p>
+          
+          <p>Hello! I'm Jane, a professional photographer living in Milano, Italy. My journey with photography started during my university years when I discovered the magic of freezing moments in time. What started as a hobby quickly blossomed into a deep passion and eventually became a professional work.</p>
+          
+          <p>I specialize in portrait, wedding, and nature photography. I always aim at  striving to tell unique stories through my lens. Every photograph I take is mixed with emotion, creativity, and technical excellence. I believe that great photography isn't just about perfect lighting or composition, but it's about capturing the essence of a moment, the genuine emotions, and the authentic connections between people.</p>
+          
+          <div class="about-highlights">
+            <div class="highlight-item">
+              <h4>🏆 Award-Winning</h4>
+              <p>Recognized by Milan Photography Association</p>
+            </div>
+            <div class="highlight-item">
+              <h4>📸 500+ Sessions</h4>
+              <p>Happy clients and memorable moments captured</p>
+            </div>
+            <div class="highlight-item">
+              <h4>🌍 International</h4>
+              <p>Work featured in European photography magazines</p>
+            </div>
+          </div>
+          
+          <p>When I'm not behind the camera, you'll find me exploring Milan's hidden gems, experimenting with new photography techniques, or planning my next adventure. I'm always excited to meet new people and help them preserve their most cherished memories.</p>
+        </div>
+        
+        <div class="about-image">
+          <img src="https://picsum.photos/400/500?random=photographer" alt="Jane Jones - Professional Photographer">
+          <div class="image-caption">
+            <p>"Every moment has a story waiting to be told."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact-section" class="contact-wrapper">
+    <div class="contact-container">
+      <div class="contact-header">
+        <h2>Get In Touch</h2>
+        <p>Ready to capture your special moments? Let's discuss your photography needs.</p>
+      </div>
+
+      <div class="contact-content">
+        <div class="contact-info">
+          <h3>Contact Information</h3>
+          <div class="info-item">
+            <span class="icon">📧</span>
+            <div>
+              <h4>Email</h4>
+              <p>info@janejones.com</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="icon">📱</span>
+            <div>
+              <h4>Phone</h4>
+              <p>+39 351 123 4567</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="icon">📍</span>
+            <div>
+              <h4>Location</h4>
+              <p>Milano, Italy</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="icon">🕒</span>
+            <div>
+              <h4>Working Hours</h4>
+              <p>Mon-Fri: 9AM-6PM</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-container">
+          <h3>Send Message</h3>
+          <form id="contact-form" class="contact-form">
+            <div class="form-group">
+              <label for="name">Your Name *</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone (Optional)</label>
+              <input type="tel" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Send Message</button>
+            <div id="form-success" style="display:none; color: green; margin-top: 10px;">Thank you! Your message has been sent.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About Jane Jones</h3>
+        <p>Professional photographer specializing in portrait, wedding, and nature photography. Capturing life's most precious moments with artistic vision and technical excellence.</p>
+        <div class="social-links">
+          <a href="#" title="Instagram">📷</a>
+          <a href="#" title="Facebook">📘</a>
+          <a href="#" title="Twitter">🐦</a>
+          <a href="#" title="LinkedIn">💼</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h3>Services</h3>
+        <ul>
+          <li><a href="#">Portrait Photography</a></li>
+          <li><a href="#">Wedding Photography</a></li>
+          <li><a href="#">Nature Photography</a></li>
+          <li><a href="#">Event Photography</a></li>
+          <li><a href="#">Photo Editing</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#index-gallery">Gallery</a></li>
+          <li><a href="#about">About Me</a></li>
+          <li><a href="#contact-section">Contact</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="wrapper-main">
+        <p>&copy; 2025 Jane Jones Photography. All rights reserved. | Designed with ❤️</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox modal -->
+  <div id="lightbox" class="lightbox">
+    <span class="close" id="closeBtn">&times;</span>
+    <img id="lightbox-img" src="" alt="Expanded Photo">
+    <button class="nav-btn prev" id="prevBtn">‹</button>
+    <button class="nav-btn next" id="nextBtn">›</button>
+  </div>
+
+  <script>
+    // Gallery functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const galleryImages = document.querySelectorAll('.gallery-img');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const closeBtn = document.getElementById('closeBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      
+      let currentIndex = 0;
+      let imageArray = Array.from(galleryImages);
+
+      // Add click event to each gallery image
+      galleryImages.forEach((img, index) => {
+        img.addEventListener('click', function() {
+          openLightbox(index);
+        });
+      });
+
+      // Open lightbox function
+      function openLightbox(index) {
+        currentIndex = index;
+        lightboxImg.src = imageArray[index].src;
+        lightboxImg.alt = imageArray[index].alt;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      // Close lightbox function
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+
+      // Navigate to previous image
+      function prevImage() {
+        currentIndex = currentIndex > 0 ? currentIndex - 1 : imageArray.length - 1;
+        lightboxImg.src = imageArray[currentIndex].src;
+        lightboxImg.alt = imageArray[currentIndex].alt;
+      }
+
+      // Navigate to next image  
+      function nextImage() {
+        currentIndex = currentIndex < imageArray.length - 1 ? currentIndex + 1 : 0;
+        lightboxImg.src = imageArray[currentIndex].src;
+        lightboxImg.alt = imageArray[currentIndex].alt;
+      }
+
+      // Event listeners
+      closeBtn.addEventListener('click', closeLightbox);
+      prevBtn.addEventListener('click', prevImage);
+      nextBtn.addEventListener('click', nextImage);
+
+      // Close lightbox when clicking outside the image
+      lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (!lightbox.classList.contains('active')) return;
+        
+        switch(e.key) {
+          case 'Escape':
+            closeLightbox();
+            break;
+          case 'ArrowLeft':
+            prevImage();
+            break;
+          case 'ArrowRight':
+            nextImage();
+            break;
+        }
+      });
+
+      // Contact form functionality
+      const contactForm = document.getElementById('contact-form');
+      const formSuccess = document.getElementById('form-success');
+
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(contactForm);
+        const submitBtn = contactForm.querySelector('.submit-btn');
+        
+        // Change button state
+        submitBtn.innerHTML = 'Sending...';
+        submitBtn.disabled = true;
+
+        // Simulate form submission (replace with actual backend call)
+        setTimeout(() => {
+          formSuccess.style.display = 'block';
+          contactForm.reset();
+          submitBtn.innerHTML = 'Send Message';
+          submitBtn.disabled = false;
+          
+          // Hide success message after 5 seconds
+          setTimeout(() => {
+            formSuccess.style.display = 'none';
+          }, 5000);
+        }, 1000);
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
