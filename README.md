@@ -4,7 +4,7 @@ This repository contains a simple, clean, and responsive personal website built 
 
 ---
 
-# #Features
+# Features
 
 - **Responsive design** optimized for desktops, tablets, and mobiles  
 - **Easy navigation** with a clear footer containing project info  
@@ -13,7 +13,7 @@ This repository contains a simple, clean, and responsive personal website built 
 
 ---
 
-# #TechnologiesUsed
+# TechnologiesUsed
 
 - HTML5  
 - CSS3  
@@ -21,7 +21,7 @@ This repository contains a simple, clean, and responsive personal website built 
 
 ---
 
-# #GettingStarted
+# GettingStarted
 
 To run this project locally, just clone the repository and open the `index.html` file in your browser:
 
