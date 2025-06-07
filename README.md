@@ -26,4 +26,5 @@ This repository contains a simple, clean, and responsive personal website built 
 To run this project locally, just clone the repository and open the `index.html` file in your browser:
 
 ```bash
-git clone https://github.com/busrara/your-sample-portfolio-web-development.git
+git clone https://github.com/busrara/sample-portfolio-web-development
+.git
